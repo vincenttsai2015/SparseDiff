@@ -1,5 +1,4 @@
 import os
-
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import pathlib
 
@@ -20,7 +19,7 @@ from diffusion_model_sparse import DiscreteDenoisingDiffusion
 from metrics.molecular_metrics import TrainMolecularMetricsDiscrete
 from diffusion.extra_features import DummyExtraFeatures, ExtraFeatures
 from diffusion.extra_features_molecular import ExtraMolecularFeatures
-from sparse_diffusion.metrics.sampling_metrics import SamplingMetrics
+from metrics.sampling_metrics import SamplingMetrics
 
 # debug for multi-gpu
 import resource

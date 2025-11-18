@@ -1,5 +1,9 @@
 import time
-import os
+import os, sys
+import pathlib
+import os.path as osp
+RootPath = pathlib.Path(osp.realpath(__file__)).parents[1]
+sys.path.append(f'{RootPath}')
 import math
 import pickle
 import json
@@ -21,21 +25,21 @@ from diffusion.noise_schedule import (
 from metrics.train_metrics import TrainLossDiscrete
 from metrics.abstract_metrics import SumExceptBatchMetric, SumExceptBatchKL, NLL
 from analysis.visualization import Visualizer
-from sparse_diffusion import utils
-from sparse_diffusion.diffusion import diffusion_utils
-from sparse_diffusion.diffusion.sample_edges_utils import (
+import utils
+from diffusion import diffusion_utils
+from diffusion.sample_edges_utils import (
     get_computational_graph,
     mask_query_graph_from_comp_graph,
     sample_non_existing_edge_attr,
     condensed_to_matrix_index_batch,
     matrix_to_condensed_index_batch,
 )
-from sparse_diffusion.diffusion.sample_edges import (
+from diffusion.sample_edges import (
     sample_query_edges,
     sample_non_existing_edges_batched,
     sampled_condensed_indices_uniformly,
 )
-from sparse_diffusion.models.sign_pos_encoder import SignNetNodeEncoder
+from models.sign_pos_encoder import SignNetNodeEncoder
 
 
 class DiscreteDenoisingDiffusion(pl.LightningModule):

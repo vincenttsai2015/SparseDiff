@@ -1,8 +1,12 @@
 import abc
 import numpy as np
-
-from sparse_diffusion.diffusion.distributions import DistributionNodes
-import sparse_diffusion.utils as utils
+import os, sys
+import pathlib
+import os.path as osp
+RootPath = pathlib.Path(osp.realpath(__file__)).parents[1]
+sys.path.append(f'{RootPath}')
+from diffusion.distributions import DistributionNodes
+import utils
 import torch
 import torch.nn.functional as F
 from torch_geometric.data.lightning import LightningDataset
