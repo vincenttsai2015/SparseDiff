@@ -23,7 +23,7 @@ This code was tested with PyTorch 2.4.1, cuda 12.1 and torch_geometrics 2.4.0
 
 ## Main execution file usage
 * Use config files in folder ```config/experiments```.
-* Example command for execution: ```CUDA_VISIBLE_DEVICES=0 python main.py +experiments=ego.yaml```
+* Example command for execution: ```CUDA_VISIBLE_DEVICES=0 python main.py +experiment=ego.yaml```
   - All code is currently launched through `python3 main.py`. Check hydra documentation (https://hydra.cc/) for overriding default parameters.
   - To run the debugging code: `python3 main.py +experiment=debug.yaml`. We advise to try to run the debug mode first
     before launching full experiments.
