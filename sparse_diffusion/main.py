@@ -106,6 +106,13 @@ def main(cfg: DictConfig):
             domain_features = DummyExtraFeatures()
 
         train_metrics = TrainMolecularMetricsDiscrete(dataset_infos)
+    elif dataset_config["name"] in ["wiki-vote", "my_random_data"]:
+        from datasets.pyg_real_dataset import (RealGraphDataModule, RealDatasetInfos)
+        datamodule = RealGraphDataModule(cfg)
+        dataset_infos = RealDatasetInfos(datamodule)
+        train_metrics = TrainAbstractMetricsDiscrete()
+        domain_features = DummyExtraFeatures()
+        dataloaders = datamodule.dataloaders
     else:
         raise NotImplementedError("Unknown dataset {}".format(cfg["dataset"]))
 

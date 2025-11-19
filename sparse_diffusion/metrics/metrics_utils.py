@@ -98,9 +98,10 @@ def edge_counts(data_list, num_bond_types=5):
 
     for data in tqdm(data_list):
         total_pairs = data.num_nodes * (data.num_nodes - 1)
-
         num_edges = data.edge_attr.shape[0]
         num_non_edges = total_pairs - num_edges
+        if(num_non_edges < 0):
+            print(data, data.edge_index)
         assert num_non_edges >= 0
 
         if len(data.edge_attr.shape) == 1:
