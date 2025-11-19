@@ -19,7 +19,7 @@ This code was tested with PyTorch 2.4.1, cuda 12.1 and torch_geometrics 2.4.0
 * Please ensure the synchronization of the versions of *nvcc drivers, Pytorch, PyG, and DGL*!
 * Install the rest packages: ```pip install -r requirements.txt```
 * Install mini-moses (optional): ```pip install git+https://github.com/igor-krawczuk/mini-moses```
-* Navigate to the  directory ```./sparse_diffusion/analysis/orca``` and compile orca.cpp: ```g++ -O2 -std=c++11 -o orca orca.cpp```
+* Navigate to the directory ```./sparse_diffusion/analysis/orca``` and compile orca.cpp: ```g++ -O2 -std=c++11 -o orca orca.cpp```
 
 ## Main execution file usage
 * Use config files in folder ```config/experiments```.
