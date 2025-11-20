@@ -32,9 +32,6 @@ from datasets.abstract_dataset import AbstractDataModule, AbstractDatasetInfos
 def attribute_label(interaction_dict, snapshot_list):
     labeled_snapshots = []
     interaction_id = {b:i for i,b in enumerate(interaction_dict.keys())}
-    node_labels = torch.eye(2)
-    edge_labels = torch.eye(3)
-    cross_edge_labels = torch.eye(3)
     for _, g in enumerate(snapshot_list):
         # intra-layer
         layers = {l: nx.Graph() for l in range(len(interaction_dict))}
@@ -202,9 +199,9 @@ class RealDataset(InMemoryDataset):
 
         print('Converting to PyG format...')
         data_list = [from_networkx(snapshot) for _, snapshot in enumerate(relabeled)]
-        
-        for _, snapshot in enumerate(data_list):
-            snapshot.y = torch.zeros(1,2)
+        for data in data_list:
+            if self.pre_transform is not None:
+                data = self.pre_transform(data)
         print(f'len(flatten_pyg_snapshots)={len(data_list)}')
             
         num_nodes = node_counts(data_list)
