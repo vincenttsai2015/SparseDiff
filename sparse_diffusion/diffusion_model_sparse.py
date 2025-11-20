@@ -1213,41 +1213,7 @@ class DiscreteDenoisingDiffusion(pl.LightningModule):
         sparse_sampled_data = diffusion_utils.sample_sparse_discrete_feature_noise(
             limit_dist=self.limit_dist, node_mask=node_mask
         )
-        # ================= START FIX =================
-        # 問題修復：Sampling 時 y 為空，導致 dimension mismatch。
-        # 邏輯：模型總輸入 y 維度 = Base_y + Time(1) + Extra_y
-        if sparse_sampled_data.y.shape[1] == 0:
-            # 1. 計算 Extra Features 的 y 維度 (通過跑一次 dummy data)
-            dummy_data = {
-                'node_t': sparse_sampled_data.node[:1],
-                'edge_index_t': torch.zeros((2, 0), device=self.device, dtype=torch.long),
-                'edge_attr_t': torch.zeros((0, self.out_dims.E), device=self.device),
-                'batch': torch.zeros(1, device=self.device, dtype=torch.long),
-                'y_t': torch.zeros((1, 0), device=self.device), 
-                'charge_t': torch.zeros((1, 0), device=self.device),
-            }
-            
-            with torch.no_grad():
-                try:
-                    extra_feats = self.extra_features(dummy_data)
-                    if isinstance(extra_feats, tuple):
-                        extra_feats = extra_feats[0]
-                    extra_y_dim = extra_feats.y.shape[-1] if hasattr(extra_feats, 'y') else 0
-                except Exception as e:
-                    print(f"[Warning] Failed to verify extra features dim dynamically: {e}")
-                    # 如果動態計算失敗，根據你的 log 手動設定 (Total 41 - Time 1 - Base 2 = 38)
-                    extra_y_dim = 38 
-
-            # 2. 計算缺失的 Base Y 維度
-            # self.in_dims.y 是模型定義的總輸入維度 (41)
-            # 減去 Time step (1) 和 Extra Features (extra_y_dim)
-            base_y_dim = self.in_dims.y - 1 - extra_y_dim
-            
-            # 3. 初始化正確維度的 y (全 0)
-            if base_y_dim > 0:
-                sparse_sampled_data.y = torch.zeros((batch_size, base_y_dim), device=self.device)
-                print(f"[DEBUG Fix] Initialized empty y to shape: {sparse_sampled_data.y.shape} (Base: {base_y_dim}, Extra: {extra_y_dim}, Time: 1)")
-        # ================= END FIX =================
+        
         assert number_chain_steps < self.T
         chain = utils.SparseChainPlaceHolder(keep_chain=keep_chain)
 
